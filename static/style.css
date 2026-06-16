@@ -3,7 +3,7 @@
    Concept : 未来的な SaaS ダッシュボード
    Style   : Glassmorphism × Aurora UI × Grainy Gradient
    Palette : Base #0F172A (60) / Slate surfaces (30) / Indigo→Emerald (10)
-   Type    : Playfair Display (見出し) / Inter (本文) / Oswald (数字)
+   Type    : Apple San Francisco (-apple-system) に統一
    ========================================================= */
 
 :root {
@@ -33,6 +33,10 @@
   --ease:        cubic-bezier(0.22, 1, 0.36, 1);
   --t:           0.3s;      /* hover はふんわり 0.3s */
 
+  /* フォント: Apple San Francisco（システムフォント）に統一 */
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+          "Helvetica Neue", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+
   --shadow:      0 24px 60px -20px rgba(0, 0, 0, 0.55);
   --shadow-glow: 0 0 0 1px var(--stroke), 0 30px 80px -30px rgba(129, 140, 248, 0.25);
 }
@@ -42,7 +46,7 @@
 html { scroll-behavior: smooth; }
 
 body {
-  font-family: 'Inter', "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", sans-serif;
+  font-family: var(--font);
   background: var(--base);
   color: var(--text);
   line-height: 1.7;
@@ -54,11 +58,11 @@ body {
   position: relative;
 }
 
-/* 数字は Oswald で */
+/* 数字（San Francisco・等幅数字で揃える） */
 .num {
-  font-family: 'Oswald', 'Inter', sans-serif;
-  font-weight: 500;
-  letter-spacing: 0.02em;
+  font-family: var(--font);
+  font-weight: 600;
+  letter-spacing: 0.01em;
   font-variant-numeric: tabular-nums;
 }
 
@@ -166,7 +170,7 @@ body {
 }
 
 .hero-title {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font);
   font-weight: 600;
   font-size: clamp(2.8rem, 7vw, 5.5rem);
   line-height: 1.05;
@@ -236,7 +240,7 @@ body {
 .control-section { padding: 28px; }
 
 .section-heading {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font);
   font-size: 1.35rem;
   font-weight: 600;
   margin-bottom: 22px;
@@ -349,7 +353,7 @@ input[type="range"]::-moz-range-thumb {
   color: var(--text);
   font-size: 0.92rem;
 }
-.price-info strong { font-family: 'Oswald', sans-serif; font-weight: 600; letter-spacing: 0.02em; }
+.price-info strong { font-family: var(--font); font-weight: 600; letter-spacing: 0.02em; }
 
 /* ===== ボタン ===== */
 .button-group { display: flex; flex-direction: column; gap: 12px; }
@@ -420,7 +424,7 @@ input[type="range"]::-moz-range-thumb {
 .plus {
   display: flex;
   align-items: center;
-  font-family: 'Oswald', sans-serif;
+  font-family: var(--font);
   font-size: 1.4rem;
   color: var(--indigo);
 }
@@ -454,7 +458,7 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .section-title {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font);
   font-size: 1.9rem;
   font-weight: 600;
   margin-bottom: 28px;
@@ -465,7 +469,7 @@ input[type="range"]::-moz-range-thumb {
   flex-wrap: wrap;
 }
 .section-title .ja {
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font);
   font-size: 0.9rem;
   font-weight: 400;
   color: var(--text-soft);
@@ -573,7 +577,7 @@ input[type="range"]::-moz-range-thumb {
   width: 48px;
   background: var(--accent-grad);
   color: #0b1120;
-  font-family: 'Oswald', sans-serif;
+  font-family: var(--font);
   font-weight: 600;
   font-size: 12px;
   border-radius: 8px;
@@ -595,7 +599,7 @@ input[type="range"]::-moz-range-thumb {
 .layout-cell .cell-price {
   display: block;
   margin-top: 4px;
-  font-family: 'Oswald', sans-serif;
+  font-family: var(--font);
   font-weight: 600;
   font-size: 12px;
   color: var(--emerald);
@@ -627,10 +631,10 @@ input[type="range"]::-moz-range-thumb {
   padding: 16px;
   border-bottom: 1px solid var(--stroke-soft);
   font-size: 0.95rem;
-  font-family: 'Oswald', sans-serif;
+  font-family: var(--font);
   letter-spacing: 0.02em;
 }
-.comparison-table td:first-child { font-family: 'Inter', sans-serif; font-weight: 600; }
+.comparison-table td:first-child { font-family: var(--font); font-weight: 600; }
 .comparison-table tbody tr { transition: background var(--t) var(--ease); }
 .comparison-table tbody tr:hover { background: rgba(129, 140, 248, 0.07); }
 
@@ -666,7 +670,7 @@ input[type="range"]::-moz-range-thumb {
 
 .machine-panel { animation: fadeUp 0.5s var(--ease) both; }
 .panel-title {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font);
   font-size: 1.4rem;
   font-weight: 600;
   margin-bottom: 26px;

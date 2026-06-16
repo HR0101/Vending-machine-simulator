@@ -15,7 +15,7 @@ const THEME = {
 
 if (window.Chart) {
   Chart.defaults.color = THEME.text;
-  Chart.defaults.font.family = "'Inter', 'Hiragino Kaku Gothic ProN', sans-serif";
+  Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Hiragino Kaku Gothic ProN", sans-serif';
   Chart.defaults.borderColor = THEME.grid;
   Chart.defaults.plugins.legend.labels.usePointStyle = true;
   Chart.defaults.plugins.legend.labels.boxWidth = 8;
