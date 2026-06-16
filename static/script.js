@@ -5,30 +5,31 @@ const charts = {};
 let comparisonData = null;
 const renderedPanels = new Set();
 
-// ===== Chart.js ダークテーマの共通設定 =====
+// ===== Chart.js 和風（和紙ライト）テーマの共通設定 =====
 const THEME = {
-  indigo: '#818CF8',
-  emerald: '#34D399',
-  text: 'rgba(226, 232, 240, 0.85)',
-  grid: 'rgba(148, 163, 184, 0.12)'
+  ai: '#235A78',     // 藍色
+  shu: '#C0392B',    // 朱色
+  kin: '#B08D3C',    // 金茶
+  text: 'rgba(44, 42, 36, 0.85)',     // 墨色
+  grid: 'rgba(120, 102, 74, 0.14)'    // 墨茶のグリッド
 };
 
 if (window.Chart) {
   Chart.defaults.color = THEME.text;
-  Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Hiragino Kaku Gothic ProN", sans-serif';
+  Chart.defaults.font.family = '"Noto Sans JP", -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", sans-serif';
   Chart.defaults.borderColor = THEME.grid;
   Chart.defaults.plugins.legend.labels.usePointStyle = true;
   Chart.defaults.plugins.legend.labels.boxWidth = 8;
 }
 
-// インディゴ→エメラルドのグラデーションを生成（縦/横）
+// 藍→朱のグラデーションを生成（縦/横）
 function accentGradient(ctx, horizontal) {
   const area = ctx.canvas;
   const g = horizontal
     ? ctx.createLinearGradient(0, 0, area.width || 600, 0)
     : ctx.createLinearGradient(0, 0, 0, area.height || 400);
-  g.addColorStop(0, 'rgba(129, 140, 248, 0.9)');
-  g.addColorStop(1, 'rgba(52, 211, 153, 0.9)');
+  g.addColorStop(0, 'rgba(35, 90, 120, 0.92)');   // 藍
+  g.addColorStop(1, 'rgba(192, 57, 43, 0.92)');   // 朱
   return g;
 }
 
@@ -333,7 +334,8 @@ function renderBracketChart(canvasId, bracketData) {
   const ctx = document.getElementById(canvasId).getContext('2d');
   if (charts[canvasId]) charts[canvasId].destroy();
 
-  const colors = ['#F87171', '#FB923C', '#FBBF24', '#34D399', '#818CF8'];
+  // 伝統色パレット：朱・柿・山吹・萌黄・藍
+  const colors = ['#C0392B', '#D9772E', '#D9A62E', '#6E8B3D', '#235A78'];
 
   charts[canvasId] = new Chart(ctx, {
     type: 'doughnut',
@@ -342,7 +344,7 @@ function renderBracketChart(canvasId, bracketData) {
       datasets: [{
         data: bracketData.data,
         backgroundColor: colors,
-        borderColor: 'rgba(15, 23, 42, 0.6)',
+        borderColor: 'rgba(251, 246, 236, 0.9)',
         borderWidth: 3,
         hoverOffset: 8
       }]

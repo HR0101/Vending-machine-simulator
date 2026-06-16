@@ -1,44 +1,50 @@
 /* =========================================================
-   Mystery Simulator — Immersive Design System
-   Concept : 未来的な SaaS ダッシュボード
-   Style   : Glassmorphism × Aurora UI × Grainy Gradient
-   Palette : Base #0F172A (60) / Slate surfaces (30) / Indigo→Emerald (10)
-   Type    : Apple San Francisco (-apple-system) に統一
+   自販機ミステリー期待値解析 — 和風デザインシステム
+   コンセプト : 和紙ライト（生成りの和紙に墨と伝統色）
+   スタイル   : 和紙テクスチャ × 七宝つなぎ × 墨のにじみ
+   配色       : 生成り #F4ECDD（60）/ 和紙カード（30）/ 朱・藍・金（10）
+   書体       : 見出し=明朝（Noto Serif JP）/ 本文=ゴシック（Noto Sans JP）
    ========================================================= */
 
 :root {
-  /* --- 60: ベース（最も支配的な色） --- */
-  --base:        #0F172A;   /* Deep Navy */
-  --base-deep:   #0a1020;
-  --base-soft:   #111c33;
+  /* --- 60: ベース（最も支配的な色＝生成りの和紙） --- */
+  --washi:       #F4ECDD;   /* 生成り */
+  --washi-deep:  #ECE1CC;   /* 鳥の子 濃いめ */
+  --washi-soft:  #FBF6EC;   /* 晒し（明るい紙面） */
 
-  /* --- 30: セカンダリ（ガラス面・面構成） --- */
-  --surface:     rgba(30, 41, 59, 0.55);   /* slate-800 glass */
-  --surface-2:   rgba(30, 41, 59, 0.35);
-  --stroke:      rgba(148, 163, 184, 0.16); /* slate hairline */
-  --stroke-soft: rgba(148, 163, 184, 0.10);
+  /* --- 30: セカンダリ（和紙カード・面構成） --- */
+  --surface:     rgba(255, 253, 247, 0.78);  /* 和紙カード面 */
+  --surface-2:   rgba(250, 244, 233, 0.62);  /* 一段沈んだ紙面 */
+  --stroke:      rgba(120, 102, 74, 0.26);   /* 墨茶のヘアライン */
+  --stroke-soft: rgba(120, 102, 74, 0.14);
 
-  /* --- 10: アクセント（指し色） --- */
-  --indigo:      #818CF8;
-  --emerald:     #34D399;
-  --accent-grad: linear-gradient(120deg, #818CF8 0%, #34D399 100%);
+  /* --- 10: アクセント（伝統色の指し色） --- */
+  --shu:         #C0392B;   /* 朱色 */
+  --shu-deep:    #A02A1E;
+  --ai:          #235A78;   /* 藍色 */
+  --ai-deep:     #1A4257;
+  --kin:         #B08D3C;   /* 金茶 */
+  --kin-soft:    #C9A84C;
+  --accent-grad: linear-gradient(120deg, #235A78 0%, #C0392B 100%); /* 藍→朱 */
 
-  /* --- テキスト --- */
-  --text:        #E2E8F0;   /* slate-200 */
-  --text-soft:   #94A3B8;   /* slate-400 */
-  --text-faint:  #64748B;   /* slate-500 */
+  /* --- テキスト（墨） --- */
+  --text:        #2C2A24;   /* 墨色 */
+  --text-soft:   #6A6253;   /* 薄墨 */
+  --text-faint:  #9A8F78;   /* 淡墨 */
 
-  --radius:      20px;
-  --radius-sm:   12px;
+  --radius:      14px;      /* 和は直線基調・角丸控えめ */
+  --radius-sm:   8px;
   --ease:        cubic-bezier(0.22, 1, 0.36, 1);
   --t:           0.3s;      /* hover はふんわり 0.3s */
 
-  /* フォント: Apple San Francisco（システムフォント）に統一 */
-  --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
-          "Helvetica Neue", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  /* 書体: 見出し明朝 / 本文ゴシック */
+  --font-serif:  "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho",
+                 "YuMincho", "MS PMincho", serif;
+  --font:        "Noto Sans JP", -apple-system, BlinkMacSystemFont,
+                 "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
 
-  --shadow:      0 24px 60px -20px rgba(0, 0, 0, 0.55);
-  --shadow-glow: 0 0 0 1px var(--stroke), 0 30px 80px -30px rgba(129, 140, 248, 0.25);
+  --shadow:      0 18px 44px -24px rgba(70, 52, 24, 0.34);
+  --shadow-glow: 0 0 0 1px var(--stroke), 0 22px 54px -30px rgba(192, 57, 43, 0.28);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -47,89 +53,96 @@ html { scroll-behavior: smooth; }
 
 body {
   font-family: var(--font);
-  background: var(--base);
+  background: var(--washi);
   color: var(--text);
-  line-height: 1.7;
+  line-height: 1.8;
   font-weight: 400;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.02em;
   min-height: 100vh;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   position: relative;
 }
 
-/* 数字（San Francisco・等幅数字で揃える） */
+/* 数字（等幅数字で揃える） */
 .num {
   font-family: var(--font);
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.01em;
   font-variant-numeric: tabular-nums;
 }
 
 /* =========================================================
-   Aurora UI 背景（有機的なグラデーションブロブ）
+   背景：七宝つなぎ（和柄）＋ 墨のにじみ
    ========================================================= */
 .aurora {
   position: fixed;
   inset: 0;
   z-index: -2;
   overflow: hidden;
-  background:
-    radial-gradient(1200px 800px at 15% -10%, rgba(129, 140, 248, 0.10), transparent 60%),
-    radial-gradient(1000px 700px at 110% 10%, rgba(52, 211, 153, 0.08), transparent 60%),
-    var(--base);
+  /* 生成りの地に、藍と朱の淡いにじみ＋七宝つなぎの和柄を重ねる */
+  background-color: var(--washi);
+  background-image:
+    radial-gradient(1100px 760px at 12% -12%, rgba(35, 90, 120, 0.10), transparent 60%),
+    radial-gradient(960px 680px at 112% 6%, rgba(192, 57, 43, 0.07), transparent 60%),
+    /* 七宝つなぎ（しっぽう）：重なり円の伝統文様 */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44'%3E%3Cg fill='none' stroke='%23235A78' stroke-width='1' stroke-opacity='0.16'%3E%3Ccircle cx='0' cy='22' r='22'/%3E%3Ccircle cx='44' cy='22' r='22'/%3E%3Ccircle cx='22' cy='0' r='22'/%3E%3Ccircle cx='22' cy='44' r='22'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: auto, auto, 44px 44px;
 }
 
+/* 墨のにじみ（落款・絵具のにじみのような有機的な滲み） */
 .blob {
   position: absolute;
   border-radius: 50%;
-  filter: blur(90px);
-  opacity: 0.55;
+  filter: blur(96px);
+  opacity: 0.30;
   will-change: transform;
 }
 
 .blob-1 {
-  width: 46vw; height: 46vw;
+  width: 44vw; height: 44vw;
   top: -12vw; left: -8vw;
-  background: radial-gradient(circle at 30% 30%, #818CF8, transparent 70%);
-  animation: drift1 22s var(--ease) infinite alternate;
+  background: radial-gradient(circle at 30% 30%, var(--ai), transparent 70%);
+  animation: drift1 24s var(--ease) infinite alternate;
 }
 .blob-2 {
-  width: 40vw; height: 40vw;
+  width: 38vw; height: 38vw;
   top: 8vw; right: -10vw;
-  background: radial-gradient(circle at 60% 40%, #34D399, transparent 70%);
-  animation: drift2 26s var(--ease) infinite alternate;
+  background: radial-gradient(circle at 60% 40%, var(--shu), transparent 70%);
+  opacity: 0.24;
+  animation: drift2 28s var(--ease) infinite alternate;
 }
 .blob-3 {
-  width: 38vw; height: 38vw;
+  width: 36vw; height: 36vw;
   bottom: -14vw; left: 18vw;
-  background: radial-gradient(circle at 50% 50%, #6366F1, transparent 70%);
-  opacity: 0.4;
-  animation: drift3 30s var(--ease) infinite alternate;
+  background: radial-gradient(circle at 50% 50%, var(--kin-soft), transparent 70%);
+  opacity: 0.22;
+  animation: drift3 32s var(--ease) infinite alternate;
 }
 .blob-4 {
-  width: 30vw; height: 30vw;
+  width: 28vw; height: 28vw;
   bottom: 4vw; right: 8vw;
-  background: radial-gradient(circle at 50% 50%, #2DD4BF, transparent 70%);
-  opacity: 0.35;
-  animation: drift1 28s var(--ease) infinite alternate-reverse;
+  background: radial-gradient(circle at 50% 50%, var(--ai), transparent 70%);
+  opacity: 0.18;
+  animation: drift1 30s var(--ease) infinite alternate-reverse;
 }
 
-@keyframes drift1 { to { transform: translate3d(6vw, 5vw, 0) scale(1.15); } }
-@keyframes drift2 { to { transform: translate3d(-7vw, 6vw, 0) scale(1.1); } }
-@keyframes drift3 { to { transform: translate3d(5vw, -6vw, 0) scale(1.2); } }
+@keyframes drift1 { to { transform: translate3d(5vw, 4vw, 0) scale(1.12); } }
+@keyframes drift2 { to { transform: translate3d(-6vw, 5vw, 0) scale(1.08); } }
+@keyframes drift3 { to { transform: translate3d(4vw, -5vw, 0) scale(1.15); } }
 
 /* =========================================================
-   Grainy Gradient（ノイズ質感オーバーレイ）
+   和紙の繊維テクスチャ（紙の質感オーバーレイ）
    ========================================================= */
 .grain {
   position: fixed;
   inset: -50%;
   z-index: -1;
   pointer-events: none;
-  opacity: 0.05;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  animation: grainShift 8s steps(6) infinite;
+  opacity: 0.06;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grainShift 9s steps(6) infinite;
 }
 @keyframes grainShift {
   0%   { transform: translate(0, 0); }
@@ -157,24 +170,26 @@ body {
 
 .eyebrow {
   display: inline-block;
+  font-family: var(--font);
   font-size: 0.72rem;
   letter-spacing: 0.42em;
   text-transform: uppercase;
-  color: var(--text-soft);
-  padding: 8px 18px;
-  border: 1px solid var(--stroke);
-  border-radius: 999px;
-  background: var(--surface-2);
-  backdrop-filter: blur(10px);
+  color: var(--shu);
+  padding: 8px 20px;
+  border: 1px solid rgba(192, 57, 43, 0.4);
+  border-radius: 2px;            /* 札のような直線的な角 */
+  background: rgba(255, 253, 247, 0.6);
+  backdrop-filter: blur(8px);
   margin-bottom: 28px;
 }
 
 .hero-title {
-  font-family: var(--font);
-  font-weight: 600;
+  font-family: var(--font-serif);
+  font-weight: 700;
   font-size: clamp(2.8rem, 7vw, 5.5rem);
-  line-height: 1.05;
-  letter-spacing: -0.01em;
+  line-height: 1.08;
+  letter-spacing: 0.02em;
+  color: var(--text);
   margin-bottom: 22px;
 }
 
@@ -183,15 +198,17 @@ body {
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  font-style: italic;
+  font-style: normal;
 }
 
 .subtitle {
+  font-family: var(--font-serif);
   font-size: 1.05rem;
   color: var(--text-soft);
-  font-weight: 300;
-  max-width: 560px;
+  font-weight: 400;
+  max-width: 580px;
   margin: 0 auto;
+  letter-spacing: 0.06em;
 }
 
 .main-grid {
@@ -202,26 +219,26 @@ body {
 }
 
 /* =========================================================
-   Glassmorphism 共通
+   和紙カード（旧 Glassmorphism）共通
    ========================================================= */
 .glass {
   background: var(--surface);
   border: 1px solid var(--stroke);
   border-radius: var(--radius);
-  backdrop-filter: blur(22px) saturate(140%);
-  -webkit-backdrop-filter: blur(22px) saturate(140%);
+  backdrop-filter: blur(8px) saturate(108%);
+  -webkit-backdrop-filter: blur(8px) saturate(108%);
   box-shadow: var(--shadow);
   position: relative;
 }
 
-/* ガラス面の上部ハイライト */
+/* 和紙カードの縁取り（淡い金茶の罫） */
 .glass::before {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
   padding: 1px;
-  background: linear-gradient(160deg, rgba(255, 255, 255, 0.18), transparent 40%);
+  background: linear-gradient(160deg, rgba(176, 141, 60, 0.40), transparent 42%);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
@@ -240,19 +257,20 @@ body {
 .control-section { padding: 28px; }
 
 .section-heading {
-  font-family: var(--font);
+  font-family: var(--font-serif);
   font-size: 1.35rem;
-  font-weight: 600;
+  font-weight: 700;
+  color: var(--text);
   margin-bottom: 22px;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.04em;
 }
 .section-heading::after {
   content: "";
   display: block;
-  width: 42px; height: 2px;
+  width: 42px; height: 3px;
   margin-top: 10px;
-  background: var(--accent-grad);
-  border-radius: 2px;
+  background: var(--shu);          /* 朱のあしらい */
+  border-radius: 1px;
 }
 
 .form-group { margin-bottom: 26px; }
@@ -270,7 +288,7 @@ body {
 
 .form-group label .num {
   font-size: 1.05rem;
-  color: var(--text);
+  color: var(--ai);
 }
 
 /* セレクト */
@@ -280,8 +298,8 @@ body {
   position: absolute;
   right: 16px; top: 50%;
   width: 8px; height: 8px;
-  border-right: 2px solid var(--text-soft);
-  border-bottom: 2px solid var(--text-soft);
+  border-right: 2px solid var(--ai);
+  border-bottom: 2px solid var(--ai);
   transform: translateY(-65%) rotate(45deg);
   pointer-events: none;
 }
@@ -294,7 +312,7 @@ select {
   font-family: inherit;
   font-size: 0.95rem;
   color: var(--text);
-  background: var(--surface-2);
+  background: var(--washi-soft);
   border: 1px solid var(--stroke);
   border-radius: var(--radius-sm);
   cursor: pointer;
@@ -302,10 +320,10 @@ select {
 }
 select:focus {
   outline: none;
-  border-color: var(--indigo);
-  box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.18);
+  border-color: var(--ai);
+  box-shadow: 0 0 0 3px rgba(35, 90, 120, 0.16);
 }
-select option { background: #1e293b; color: var(--text); }
+select option { background: var(--washi-soft); color: var(--text); }
 
 /* レンジスライダー */
 input[type="range"] {
@@ -313,7 +331,7 @@ input[type="range"] {
   height: 6px;
   -webkit-appearance: none;
   appearance: none;
-  background: linear-gradient(90deg, var(--indigo), var(--emerald));
+  background: linear-gradient(90deg, var(--ai), var(--shu));
   border-radius: 999px;
   cursor: pointer;
   outline: none;
@@ -322,17 +340,17 @@ input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 20px; height: 20px;
   border-radius: 50%;
-  background: #fff;
-  border: 3px solid var(--indigo);
-  box-shadow: 0 4px 14px rgba(129, 140, 248, 0.5);
+  background: var(--washi-soft);
+  border: 3px solid var(--shu);
+  box-shadow: 0 4px 12px rgba(192, 57, 43, 0.4);
   transition: transform var(--t) var(--ease);
 }
 input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
 input[type="range"]::-moz-range-thumb {
   width: 20px; height: 20px;
   border-radius: 50%;
-  background: #fff;
-  border: 3px solid var(--indigo);
+  background: var(--washi-soft);
+  border: 3px solid var(--shu);
 }
 
 .slider-labels {
@@ -349,51 +367,51 @@ input[type="range"]::-moz-range-thumb {
   border-radius: var(--radius-sm);
   background: var(--surface-2);
   border: 1px solid var(--stroke);
-  border-left: 3px solid var(--emerald);
+  border-left: 3px solid var(--shu);
   color: var(--text);
   font-size: 0.92rem;
 }
-.price-info strong { font-family: var(--font); font-weight: 600; letter-spacing: 0.02em; }
+.price-info strong { font-family: var(--font); font-weight: 700; letter-spacing: 0.02em; color: var(--shu-deep); }
 
-/* ===== ボタン ===== */
+/* ===== ボタン（暖簾・札のあしらい） ===== */
 .button-group { display: flex; flex-direction: column; gap: 12px; }
 
 .btn {
   padding: 14px 20px;
   border: 1px solid transparent;
   border-radius: var(--radius-sm);
-  font-family: inherit;
-  font-size: 0.95rem;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  color: #fff;
+  font-family: var(--font-serif);
+  font-size: 0.98rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--washi-soft);
   cursor: pointer;
   position: relative;
   overflow: hidden;
   transition: transform var(--t) var(--ease), box-shadow var(--t) var(--ease), filter var(--t) var(--ease);
 }
-.btn:hover { transform: scale(1.05); }
-.btn:active { transform: scale(0.95); }
+.btn:hover { transform: scale(1.04); }
+.btn:active { transform: scale(0.96); }
 
 .btn-primary {
-  background: var(--accent-grad);
-  box-shadow: 0 12px 30px -10px rgba(129, 140, 248, 0.6);
+  background: var(--shu);          /* 朱の主役ボタン */
+  box-shadow: 0 12px 28px -12px rgba(192, 57, 43, 0.6);
 }
-.btn-primary:hover { box-shadow: 0 18px 40px -10px rgba(52, 211, 153, 0.55); filter: brightness(1.05); }
+.btn-primary:hover { background: var(--shu-deep); box-shadow: 0 18px 38px -12px rgba(192, 57, 43, 0.55); }
 
 .btn-secondary {
-  background: var(--surface-2);
-  border-color: var(--stroke);
-  color: var(--text);
+  background: var(--ai);           /* 藍の副ボタン */
+  color: var(--washi-soft);
+  box-shadow: 0 12px 28px -14px rgba(35, 90, 120, 0.5);
 }
-.btn-secondary:hover { border-color: var(--indigo); box-shadow: 0 12px 30px -14px rgba(129, 140, 248, 0.5); }
+.btn-secondary:hover { background: var(--ai-deep); box-shadow: 0 16px 36px -14px rgba(35, 90, 120, 0.5); }
 
 .btn-ghost {
   background: transparent;
   border-color: var(--stroke);
   color: var(--text-soft);
 }
-.btn-ghost:hover { color: var(--text); border-color: var(--emerald); box-shadow: 0 12px 30px -14px rgba(52, 211, 153, 0.4); }
+.btn-ghost:hover { color: var(--ai); border-color: var(--ai); background: rgba(35, 90, 120, 0.06); }
 
 .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
@@ -418,15 +436,15 @@ input[type="range"]::-moz-range-thumb {
   gap: 8px;
 }
 .item-name { font-size: 0.85rem; color: var(--text); word-break: break-word; line-height: 1.4; }
-.item-price { font-size: 1.5rem; color: var(--emerald); }
+.item-price { font-size: 1.5rem; color: var(--ai); font-weight: 700; }
 .item-price::after { content: "円"; font-size: 0.7rem; color: var(--text-faint); margin-left: 2px; }
 
 .plus {
   display: flex;
   align-items: center;
-  font-family: var(--font);
+  font-family: var(--font-serif);
   font-size: 1.4rem;
-  color: var(--indigo);
+  color: var(--shu);
 }
 
 .result-summary { display: flex; flex-direction: column; gap: 8px; }
@@ -442,8 +460,8 @@ input[type="range"]::-moz-range-thumb {
   color: var(--text-soft);
 }
 .summary-item strong { font-size: 1.15rem; color: var(--text); }
-.summary-item.profit { border-color: rgba(52, 211, 153, 0.3); }
-.summary-item.profit strong { font-size: 1.35rem; color: var(--emerald); }
+.summary-item.profit { border-color: rgba(192, 57, 43, 0.3); }
+.summary-item.profit strong { font-size: 1.35rem; color: var(--shu); }
 
 /* =========================================================
    分析パネル
@@ -458,22 +476,23 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .section-title {
-  font-family: var(--font);
+  font-family: var(--font-serif);
   font-size: 1.9rem;
-  font-weight: 600;
+  font-weight: 700;
+  color: var(--text);
   margin-bottom: 28px;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.04em;
   display: flex;
   align-items: baseline;
   gap: 14px;
   flex-wrap: wrap;
 }
 .section-title .ja {
-  font-family: var(--font);
-  font-size: 0.9rem;
-  font-weight: 400;
-  color: var(--text-soft);
-  letter-spacing: 0.04em;
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--shu);
+  letter-spacing: 0.08em;
 }
 .section-title::after {
   content: "";
@@ -520,12 +539,13 @@ input[type="range"]::-moz-range-thumb {
   font-size: 0.75rem;
   color: var(--text-soft);
   margin-bottom: 10px;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
 }
 .stat-value {
+  font-family: var(--font-serif);
   font-size: 1.9rem;
-  font-weight: 600;
-  color: var(--text);
+  font-weight: 700;
+  color: var(--ai);
   line-height: 1;
 }
 
@@ -534,16 +554,17 @@ input[type="range"]::-moz-range-thumb {
   margin-bottom: 26px;
   padding: 26px;
   border-radius: var(--radius-sm);
-  background: var(--surface-2);
+  background: var(--washi-soft);
   border: 1px solid var(--stroke-soft);
 }
 .chart-container:last-child { margin-bottom: 0; }
 .chart-container h3 {
-  font-size: 1rem;
-  font-weight: 600;
+  font-family: var(--font-serif);
+  font-size: 1.02rem;
+  font-weight: 700;
   color: var(--text);
   margin-bottom: 22px;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.04em;
 }
 .chart-container canvas { max-height: 420px; }
 
@@ -557,12 +578,12 @@ input[type="range"]::-moz-range-thumb {
 }
 .mystery-legend {
   display: inline-block;
-  background: linear-gradient(120deg, rgba(129, 140, 248, 0.25), rgba(52, 211, 153, 0.25));
-  border: 1px solid rgba(129, 140, 248, 0.4);
-  border-radius: 6px;
+  background: rgba(192, 57, 43, 0.12);
+  border: 1px solid rgba(192, 57, 43, 0.4);
+  border-radius: 4px;
   padding: 2px 10px;
-  font-weight: 600;
-  color: #c7d2fe;
+  font-weight: 700;
+  color: var(--shu-deep);
 }
 
 .layout-table-wrap { overflow-x: auto; border-radius: var(--radius-sm); }
@@ -575,41 +596,41 @@ input[type="range"]::-moz-range-thumb {
 }
 .layout-table .shelf-label {
   width: 48px;
-  background: var(--accent-grad);
-  color: #0b1120;
-  font-family: var(--font);
-  font-weight: 600;
+  background: var(--ai);            /* 藍の棚見出し */
+  color: var(--washi-soft);
+  font-family: var(--font-serif);
+  font-weight: 700;
   font-size: 12px;
-  border-radius: 8px;
+  border-radius: 6px;
   letter-spacing: 0.05em;
 }
 .layout-cell {
   background: var(--surface-2);
   border: 1px solid var(--stroke-soft);
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 8px 5px;
   transition: transform var(--t) var(--ease), border-color var(--t) var(--ease), background var(--t) var(--ease);
 }
 .layout-cell:hover {
   transform: translateY(-3px);
-  border-color: var(--indigo);
-  background: rgba(129, 140, 248, 0.08);
+  border-color: var(--ai);
+  background: rgba(35, 90, 120, 0.07);
 }
 .layout-cell .cell-name { display: block; line-height: 1.3; min-height: 30px; color: var(--text); }
 .layout-cell .cell-price {
   display: block;
   margin-top: 4px;
   font-family: var(--font);
-  font-weight: 600;
+  font-weight: 700;
   font-size: 12px;
-  color: var(--emerald);
+  color: var(--ai);
 }
 .layout-cell.mystery-cell {
-  background: linear-gradient(135deg, rgba(129, 140, 248, 0.18), rgba(52, 211, 153, 0.14));
-  border-color: rgba(129, 140, 248, 0.45);
+  background: rgba(192, 57, 43, 0.10);   /* 朱のミステリーセル */
+  border-color: rgba(192, 57, 43, 0.42);
 }
-.layout-cell.mystery-cell .cell-name { font-weight: 700; color: #e0e7ff; }
-.layout-cell.mystery-cell .cell-price { color: #a7f3d0; }
+.layout-cell.mystery-cell .cell-name { font-weight: 700; color: var(--shu-deep); }
+.layout-cell.mystery-cell .cell-price { color: var(--shu); }
 
 /* =========================================================
    比較テーブル
@@ -622,10 +643,9 @@ input[type="range"]::-moz-range-thumb {
   padding: 14px 16px;
   text-align: left;
   font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  border-bottom: 1px solid var(--stroke);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  border-bottom: 2px solid var(--ai);
 }
 .comparison-table td {
   padding: 16px;
@@ -634,9 +654,9 @@ input[type="range"]::-moz-range-thumb {
   font-family: var(--font);
   letter-spacing: 0.02em;
 }
-.comparison-table td:first-child { font-family: var(--font); font-weight: 600; }
+.comparison-table td:first-child { font-family: var(--font-serif); font-weight: 700; color: var(--ai); }
 .comparison-table tbody tr { transition: background var(--t) var(--ease); }
-.comparison-table tbody tr:hover { background: rgba(129, 140, 248, 0.07); }
+.comparison-table tbody tr:hover { background: rgba(35, 90, 120, 0.06); }
 
 /* =========================================================
    タブ（自販機別詳細）
@@ -654,36 +674,38 @@ input[type="range"]::-moz-range-thumb {
   border: 1px solid transparent;
   background: transparent;
   color: var(--text-soft);
-  font-family: inherit;
-  font-size: 0.9rem;
-  font-weight: 600;
+  font-family: var(--font-serif);
+  font-size: 0.92rem;
+  font-weight: 700;
   cursor: pointer;
-  border-radius: 10px;
+  border-radius: 6px;
+  letter-spacing: 0.04em;
   transition: all var(--t) var(--ease);
 }
 .tab-btn:hover { color: var(--text); background: var(--surface-2); }
 .tab-btn.active {
-  color: #0b1120;
-  background: var(--accent-grad);
-  box-shadow: 0 10px 24px -10px rgba(129, 140, 248, 0.55);
+  color: var(--washi-soft);
+  background: var(--shu);           /* 選択中は朱 */
+  box-shadow: 0 10px 22px -12px rgba(192, 57, 43, 0.55);
 }
 
 .machine-panel { animation: fadeUp 0.5s var(--ease) both; }
 .panel-title {
-  font-family: var(--font);
+  font-family: var(--font-serif);
   font-size: 1.4rem;
-  font-weight: 600;
+  font-weight: 700;
+  color: var(--text);
   margin-bottom: 26px;
   padding: 16px 22px;
   background: var(--surface-2);
   border: 1px solid var(--stroke);
-  border-left: 4px solid var(--indigo);
+  border-left: 4px solid var(--shu);
   border-radius: var(--radius-sm);
 }
 .machine-panel .stats-grid { margin-bottom: 26px; }
 
 /* =========================================================
-   ローディング
+   読み込み中
    ========================================================= */
 .loading {
   display: flex;
@@ -696,11 +718,11 @@ input[type="range"]::-moz-range-thumb {
   width: 52px; height: 52px;
   border-radius: 50%;
   border: 3px solid var(--stroke);
-  border-top-color: var(--indigo);
-  border-right-color: var(--emerald);
+  border-top-color: var(--shu);
+  border-right-color: var(--ai);
   animation: spin 0.9s linear infinite;
 }
-.loading p { margin-top: 22px; color: var(--text-soft); font-weight: 500; letter-spacing: 0.05em; }
+.loading p { margin-top: 22px; color: var(--text-soft); font-weight: 500; letter-spacing: 0.08em; }
 
 @keyframes spin { to { transform: rotate(360deg); } }
 
@@ -710,12 +732,12 @@ input[type="range"]::-moz-range-thumb {
   text-align: center;
   color: var(--text-faint);
   font-size: 0.82rem;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
 }
-.site-footer .num { color: var(--text-soft); }
+.site-footer .num { color: var(--ai); }
 
 /* =========================================================
-   スクロール演出（Framer Motion ライクな浮き上がり）
+   スクロール演出（ふわっと浮き上がり）
    ========================================================= */
 .reveal {
   opacity: 0;

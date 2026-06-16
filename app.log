@@ -1,28 +1,27 @@
  * Serving Flask app 'app'
  * Debug mode: on
 [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
- * Running on http://127.0.0.1:5000
+ * Running on http://127.0.0.1:5001
 [33mPress CTRL+C to quit[0m
  * Restarting with stat
  * Debugger is active!
  * Debugger PIN: 238-682-152
- * Detected change in '/Users/Rhara/自販機期待値/app.py', reloading
- * Restarting with stat
- * Debugger is active!
- * Debugger PIN: 238-682-152
- * Detected change in '/Users/Rhara/自販機期待値/app.py', reloading
- * Restarting with stat
- * Debugger is active!
- * Debugger PIN: 238-682-152
- * Detected change in '/Users/Rhara/自販機期待値/app.py', reloading
- * Restarting with stat
- * Debugger is active!
- * Debugger PIN: 238-682-152
- * Detected change in '/Users/Rhara/自販機期待値/app.py', reloading
- * Restarting with stat
- * Debugger is active!
- * Debugger PIN: 238-682-152
- * Detected change in '/Users/Rhara/自販機期待値/app.py', reloading
- * Restarting with stat
- * Debugger is active!
- * Debugger PIN: 238-682-152
+127.0.0.1 - - [16/Jun/2026 15:15:02] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [16/Jun/2026 15:15:02] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [16/Jun/2026 15:15:02] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [16/Jun/2026 15:15:02] "GET /static/style.css HTTP/1.1" 200 -
+127.0.0.1 - - [16/Jun/2026 15:15:02] "GET /static/style.css HTTP/1.1" 200 -
+127.0.0.1 - - [16/Jun/2026 15:15:02] "POST /api/simulate-once HTTP/1.1" 200 -
+127.0.0.1 - - [16/Jun/2026 15:15:16] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [16/Jun/2026 15:15:16] "GET /static/style.css HTTP/1.1" 200 -
+127.0.0.1 - - [16/Jun/2026 15:15:16] "GET /static/script.js HTTP/1.1" 200 -
+127.0.0.1 - - [16/Jun/2026 15:15:16] "POST /api/layout HTTP/1.1" 200 -
+127.0.0.1 - - [16/Jun/2026 15:15:16] "GET /api/machines HTTP/1.1" 200 -
+127.0.0.1 - - [16/Jun/2026 15:15:16] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+127.0.0.1 - - [16/Jun/2026 15:15:26] "POST /api/simulate HTTP/1.1" 200 -
+127.0.0.1 - - [16/Jun/2026 15:20:24] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [16/Jun/2026 15:20:24] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [16/Jun/2026 15:20:24] "[36mGET /static/script.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [16/Jun/2026 15:20:24] "POST /api/layout HTTP/1.1" 200 -
+127.0.0.1 - - [16/Jun/2026 15:20:24] "GET /api/machines HTTP/1.1" 200 -
+127.0.0.1 - - [16/Jun/2026 15:20:32] "POST /api/simulate HTTP/1.1" 200 -
