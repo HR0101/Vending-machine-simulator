@@ -5,12 +5,59 @@ const charts = {};
 let comparisonData = null;
 const renderedPanels = new Set();
 
+// ===== Chart.js ダークテーマの共通設定 =====
+const THEME = {
+  indigo: '#818CF8',
+  emerald: '#34D399',
+  text: 'rgba(226, 232, 240, 0.85)',
+  grid: 'rgba(148, 163, 184, 0.12)'
+};
+
+if (window.Chart) {
+  Chart.defaults.color = THEME.text;
+  Chart.defaults.font.family = "'Inter', 'Hiragino Kaku Gothic ProN', sans-serif";
+  Chart.defaults.borderColor = THEME.grid;
+  Chart.defaults.plugins.legend.labels.usePointStyle = true;
+  Chart.defaults.plugins.legend.labels.boxWidth = 8;
+}
+
+// インディゴ→エメラルドのグラデーションを生成（縦/横）
+function accentGradient(ctx, horizontal) {
+  const area = ctx.canvas;
+  const g = horizontal
+    ? ctx.createLinearGradient(0, 0, area.width || 600, 0)
+    : ctx.createLinearGradient(0, 0, 0, area.height || 400);
+  g.addColorStop(0, 'rgba(129, 140, 248, 0.9)');
+  g.addColorStop(1, 'rgba(52, 211, 153, 0.9)');
+  return g;
+}
+
 // 初期化
 document.addEventListener('DOMContentLoaded', function() {
   initializeUI();
   updateMysteryPrice();
   loadLayout();
+  initScrollReveal();
 });
+
+// スクロールに合わせてふわっと浮き上がる演出
+function initScrollReveal() {
+  const targets = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    targets.forEach(el => el.classList.add('is-visible'));
+    return;
+  }
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  targets.forEach(el => observer.observe(el));
+}
 
 // UI初期化
 function initializeUI() {
@@ -200,18 +247,20 @@ function renderProfitChart(canvasId, profitData) {
       datasets: [{
         label: '出現回数',
         data: profitData.data,
-        backgroundColor: 'rgba(43, 108, 176, 0.7)',
-        borderColor: 'rgba(43, 108, 176, 1)',
-        borderWidth: 1
+        backgroundColor: accentGradient(ctx, false),
+        borderColor: 'transparent',
+        borderRadius: 6,
+        borderWidth: 0,
+        maxBarThickness: 28
       }]
     },
     options: {
       responsive: true,
       maintainAspectRatio: true,
-      plugins: { legend: { display: true } },
+      plugins: { legend: { display: false } },
       scales: {
-        y: { beginAtZero: true, title: { display: true, text: '出現回数' } },
-        x: { title: { display: true, text: '利益（円）' } }
+        y: { beginAtZero: true, grid: { color: THEME.grid }, title: { display: true, text: '出現回数' } },
+        x: { grid: { display: false }, title: { display: true, text: '利益（円）' } }
       }
     }
   });
@@ -229,17 +278,21 @@ function renderComboChart(canvasId, comboData) {
       datasets: [{
         label: '出現回数',
         data: comboData.data,
-        backgroundColor: 'rgba(197, 48, 48, 0.7)',
-        borderColor: 'rgba(197, 48, 48, 1)',
-        borderWidth: 1
+        backgroundColor: accentGradient(ctx, true),
+        borderColor: 'transparent',
+        borderRadius: 6,
+        maxBarThickness: 22
       }]
     },
     options: {
       indexAxis: 'y',
       responsive: true,
       maintainAspectRatio: true,
-      plugins: { legend: { display: true } },
-      scales: { x: { beginAtZero: true } }
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { beginAtZero: true, grid: { color: THEME.grid } },
+        y: { grid: { display: false } }
+      }
     }
   });
 }
@@ -256,17 +309,21 @@ function renderProductChart(canvasId, productData) {
       datasets: [{
         label: '出現確率 (%)',
         data: productData.data,
-        backgroundColor: 'rgba(56, 161, 105, 0.7)',
-        borderColor: 'rgba(56, 161, 105, 1)',
-        borderWidth: 1
+        backgroundColor: accentGradient(ctx, true),
+        borderColor: 'transparent',
+        borderRadius: 6,
+        maxBarThickness: 18
       }]
     },
     options: {
       indexAxis: 'y',
       responsive: true,
       maintainAspectRatio: true,
-      plugins: { legend: { display: true } },
-      scales: { x: { beginAtZero: true, max: 10 } }
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { beginAtZero: true, max: 10, grid: { color: THEME.grid } },
+        y: { grid: { display: false } }
+      }
     }
   });
 }
@@ -276,7 +333,7 @@ function renderBracketChart(canvasId, bracketData) {
   const ctx = document.getElementById(canvasId).getContext('2d');
   if (charts[canvasId]) charts[canvasId].destroy();
 
-  const colors = ['#e74c3c', '#f39c12', '#f1c40f', '#2ecc71', '#27ae60'];
+  const colors = ['#F87171', '#FB923C', '#FBBF24', '#34D399', '#818CF8'];
 
   charts[canvasId] = new Chart(ctx, {
     type: 'doughnut',
@@ -285,13 +342,15 @@ function renderBracketChart(canvasId, bracketData) {
       datasets: [{
         data: bracketData.data,
         backgroundColor: colors,
-        borderColor: '#fff',
-        borderWidth: 2
+        borderColor: 'rgba(15, 23, 42, 0.6)',
+        borderWidth: 3,
+        hoverOffset: 8
       }]
     },
     options: {
       responsive: true,
       maintainAspectRatio: true,
+      cutout: '62%',
       plugins: {
         legend: { position: 'right' },
         tooltip: {
@@ -370,28 +429,23 @@ function displayComparisonSummary(comparison) {
       datasets: [{
         label: '平均利益（円）',
         data: comparison.map(item => item.avg_profit),
-        backgroundColor: [
-          'rgba(43, 108, 176, 0.7)',
-          'rgba(197, 48, 48, 0.7)',
-          'rgba(56, 161, 105, 0.7)'
-        ],
-        borderColor: [
-          'rgba(43, 108, 176, 1)',
-          'rgba(197, 48, 48, 1)',
-          'rgba(56, 161, 105, 1)'
-        ],
-        borderWidth: 1
+        backgroundColor: accentGradient(ctx, false),
+        borderColor: 'transparent',
+        borderRadius: 8,
+        maxBarThickness: 90
       }]
     },
     options: {
       responsive: true,
       maintainAspectRatio: true,
-      plugins: { legend: { display: true } },
+      plugins: { legend: { display: false } },
       scales: {
         y: {
           beginAtZero: true,
+          grid: { color: THEME.grid },
           ticks: { callback: function(value) { return value + '円'; } }
-        }
+        },
+        x: { grid: { display: false } }
       }
     }
   });
