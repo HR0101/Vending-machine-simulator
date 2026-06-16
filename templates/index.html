@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mystery Simulator — 自販機ミステリー期待値分析</title>
+
+  <!-- Google Fonts: Playfair Display(見出し) / Inter(本文) / Oswald(数字) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@300;400;500;600;700&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <!-- Aurora UI: 有機的なグラデーションブロブ -->
+  <div class="aurora" aria-hidden="true">
+    <span class="blob blob-1"></span>
+    <span class="blob blob-2"></span>
+    <span class="blob blob-3"></span>
+    <span class="blob blob-4"></span>
+  </div>
+  <!-- Grainy Gradient: ノイズ質感のオーバーレイ -->
+  <div class="grain" aria-hidden="true"></div>
+
+  <div class="container">
+    <!-- ===== ヒーロー ===== -->
+    <header class="hero reveal">
+      <span class="eyebrow">CIT&nbsp;CAMPUS · VENDING&nbsp;ANALYTICS</span>
+      <h1 class="hero-title">Mystery <span class="grad-text">Simulator</span></h1>
+      <p class="subtitle">
+        津田沼キャンパスの自販機「ミステリー」ボタンを、<br>
+        確率・期待値・出現分布で静かに解き明かす。
+      </p>
+    </header>
+
+    <div class="main-grid">
+      <!-- ===== 左パネル: コントロール ===== -->
+      <aside class="control-panel">
+        <div class="control-section glass reveal">
+          <h3 class="section-heading">Simulation</h3>
+
+          <div class="form-group">
+            <label for="machine-select">自販機を選択</label>
+            <div class="select-wrap">
+              <select id="machine-select">
+                {% for machine in machines %}
+                  <option value="{{ machine }}">{{ machine }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div id="mystery-price" class="price-info"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="trial-slider">試行回数 <span id="trial-count" class="num">10000</span></label>
+            <input type="range" id="trial-slider" min="100" max="100000" value="10000" step="100">
+            <div class="slider-labels">
+              <span class="num">100</span>
+              <span class="num">100,000</span>
+            </div>
+          </div>
+
+          <div class="button-group">
+            <button id="simulate-once-btn" class="btn btn-primary">1回 引いてみる</button>
+            <button id="simulate-btn" class="btn btn-secondary">大規模シミュレーション</button>
+            <button id="comparison-btn" class="btn btn-ghost">3台を比較する</button>
+          </div>
+        </div>
+
+        <!-- 1回の結果表示 -->
+        <div id="single-result" class="control-section glass" style="display: none;">
+          <h3 class="section-heading">Result</h3>
+          <div class="result-box">
+            <div class="item-display">
+              <div class="item">
+                <span id="result-item1" class="item-name">-</span>
+                <span id="result-price1" class="item-price num">-</span>
+              </div>
+              <div class="plus">+</div>
+              <div class="item">
+                <span id="result-item2" class="item-name">-</span>
+                <span id="result-price2" class="item-price num">-</span>
+              </div>
+            </div>
+            <div class="result-summary">
+              <div class="summary-item">
+                <span>合計</span>
+                <strong id="result-total" class="num">-</strong>
+              </div>
+              <div class="summary-item profit">
+                <span>利益</span>
+                <strong id="result-profit" class="num">-</strong>
+              </div>
+              <div class="summary-item">
+                <span>ROI</span>
+                <strong id="result-roi" class="num">-</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- ===== 右パネル: 分析結果 ===== -->
+      <main class="analysis-panel">
+        <!-- ローディング表示 -->
+        <div id="loading" class="loading glass" style="display: none;">
+          <div class="spinner"></div>
+          <p>シミュレーション中…</p>
+        </div>
+
+        <!-- 実機の配置表示 -->
+        <section id="layout-section" class="glass reveal">
+          <h2 class="section-title">Layout<span class="ja"> 自販機の配置</span></h2>
+          <p class="layout-note">
+            実機どおりの配置（上段・中段・下段／左→右）。
+            <span class="mystery-legend">ミステリー</span> はランダムで2本出るボタンです。
+          </p>
+          <div class="layout-table-wrap" id="layout-table-wrap"></div>
+        </section>
+
+        <!-- 統計情報 -->
+        <section id="stats-section" class="glass" style="display: none;">
+          <h2 class="section-title">Statistics<span class="ja"> 統計サマリー</span></h2>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-label">平均獲得価格</div>
+              <div class="stat-value num" id="stat-avg-total">-</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">平均利益</div>
+              <div class="stat-value num" id="stat-avg-profit">-</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">平均ROI</div>
+              <div class="stat-value num" id="stat-avg-roi">-</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">赤字確率</div>
+              <div class="stat-value num" id="stat-loss-rate">-</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">最高利益</div>
+              <div class="stat-value num" id="stat-max-profit">-</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">最低利益</div>
+              <div class="stat-value num" id="stat-min-profit">-</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">標準偏差</div>
+              <div class="stat-value num" id="stat-std-dev">-</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- グラフセクション -->
+        <section id="charts-section" class="glass" style="display: none;">
+          <h2 class="section-title">Analysis<span class="ja"> 詳細分析</span></h2>
+          <div class="chart-container">
+            <h3>利益分布</h3>
+            <canvas id="profit-chart"></canvas>
+          </div>
+
+          <div class="chart-container">
+            <h3>最も出現しやすい組み合わせ TOP10</h3>
+            <canvas id="combo-chart"></canvas>
+          </div>
+
+          <div class="chart-container">
+            <h3>商品出現確率 TOP15</h3>
+            <canvas id="product-chart"></canvas>
+          </div>
+
+          <div class="chart-container">
+            <h3>利益帯別の確率分布</h3>
+            <canvas id="bracket-chart"></canvas>
+          </div>
+        </section>
+
+        <!-- 複数自販機比較 -->
+        <section id="comparison-section" class="glass" style="display: none;">
+          <h2 class="section-title">Comparison<span class="ja"> 3台の比較</span></h2>
+          <div class="comparison-table">
+            <table id="comparison-table">
+              <thead>
+                <tr>
+                  <th>自販機</th>
+                  <th>ミステリー価格</th>
+                  <th>平均利益</th>
+                  <th>平均ROI</th>
+                  <th>赤字確率</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div class="chart-container">
+            <h3>平均利益の比較</h3>
+            <canvas id="comparison-chart"></canvas>
+          </div>
+
+          <!-- 自販機別の詳細分析（タブ切り替え） -->
+          <h2 class="section-title" style="margin-top: 48px;">By Machine<span class="ja"> 自販機別 詳細分析</span></h2>
+          <div class="tabs" id="machine-tabs"></div>
+          <div id="machine-details"></div>
+        </section>
+      </main>
+    </div>
+
+    <footer class="site-footer">
+      <span class="num">{{ machines|length }}</span> machines analyzed · Built with Flask &amp; Chart.js
+    </footer>
+  </div>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
