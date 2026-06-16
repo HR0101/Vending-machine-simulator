@@ -208,7 +208,7 @@ st.set_page_config(page_title='自販機ミステリーシミュレーター', l
 st.title('🥤 自販機ミステリーシミュレーター')
 
 # サイドバー設定
-st.sidebar.markdown('## ⚙️ シミュレーション設定')
+st.sidebar.markdown('##  シミュレーション設定')
 machine_name = st.sidebar.selectbox('自販機を選択', list(MACHINES.keys()))
 num_trials = st.sidebar.slider('試行回数', 100, 100000, 10000, step=100)
 
@@ -220,12 +220,12 @@ with col1:
     mystery_price = get_mystery_price(machine_name)
     st.info(f'ミステリー代金: **{mystery_price}円**')
 
-    if st.button('🎲 1回シミュレーション実行', use_container_width=True, key='single'):
+    if st.button(' 1回シミュレーション実行', use_container_width=True, key='single'):
         item1, item2 = simulate_mystery(machine_name)
         total_value = item1[1] + item2[1]
         profit = total_value - mystery_price
 
-        st.success('✅ 出ました!')
+        st.success(' 出ました!')
         st.markdown(f'''
         **商品1:** {item1[0]} ({item1[1]}円)
         **商品2:** {item2[0]} ({item2[1]}円)
@@ -236,16 +236,16 @@ with col1:
 
 # ===== 大規模シミュレーション =====
 st.markdown('---')
-st.markdown('## 📊 大規模シミュレーション結果')
+st.markdown('##  大規模シミュレーション結果')
 
-if st.button('🚀 シミュレーション開始', use_container_width=True, key='simulation'):
+if st.button(' シミュレーション開始', use_container_width=True, key='simulation'):
     with st.spinner(f'{num_trials:,}回のシミュレーション中...'):
         df = run_simulation(machine_name, num_trials)
 
     st.success(f'✅ {num_trials:,}回のシミュレーション完了!')
 
     # 統計情報
-    st.markdown('### 📈 統計情報')
+    st.markdown('###  統計情報')
     stats = calculate_statistics(df)
 
     metric_col = st.columns(4)
@@ -257,7 +257,7 @@ if st.button('🚀 シミュレーション開始', use_container_width=True, ke
     st.metric('利益の標準偏差', f"{stats['標準偏差']:.1f}円")
 
     # 分布グラフ
-    st.markdown('### 📉 利益分布')
+    st.markdown('###  利益分布')
     fig, ax = plt.subplots(figsize=(10, 5))
     ax.hist(df['利益'], bins=50, color='#2b6cb0', alpha=0.7, edgecolor='black')
     ax.axvline(df['利益'].mean(), color='red', linestyle='--', linewidth=2, label=f'平均: {df["利益"].mean():.1f}円')
@@ -334,12 +334,12 @@ if st.button('🚀 シミュレーション開始', use_container_width=True, ke
         st.pyplot(fig, use_container_width=True)
 
     # 詳細データのダウンロード
-    st.markdown('### 📥 詳細データ')
+    st.markdown('###  詳細データ')
     st.dataframe(df.head(20), use_container_width=True)
 
     csv_data = df.to_csv(index=False, encoding='utf-8-sig')
     st.download_button(
-        label='📊 CSVでダウンロード',
+        label=' CSVでダウンロード',
         data=csv_data,
         file_name=f'{machine_name}_simulation_{num_trials}.csv',
         mime='text/csv'
